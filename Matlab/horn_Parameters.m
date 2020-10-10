@@ -1,5 +1,5 @@
 clear;
-f = 2.45e9;
+f = 13.5e9;
 lambda = 3e8 / f;
 k = 2*pi/lambda;
 %% Initial restriction
@@ -25,17 +25,22 @@ a = b/1.27;
 % would be necessary to increase the b/a relation. If the TM was dominant,
 % it woulld be necessary to decrease the b/a relation.
 %% Calculating phi_fl
-% Parameters from diagram of corrugated horn (diapo 16)
+% Parameters from table 15.2
 % It is wanted an intensity of -12 dB at 35º. 
 relFielInt = 10^(-12/20);
-% It is obtained that for a s = 0.8, 2pia0/lambda*sin(35) = 8
-s = 0.8;
+% It is obtained that for a s = 0.2, 2pia0/lambda*sin(35) = 4
+s = 0.2;
 theta_35 = 35*pi/180;
-a_0 = 8/sin(theta_35)*lambda/(2*pi);
+a_0 = 4/sin(theta_35)*lambda/(2*pi);
 % For this value of a_0, it is calculated L_long, the L in the diapo 16,
 % useful to calculate theta
 L_long = a_0^2/(2*lambda*s);
 theta = atan(a_0 / L_long);
+
+% To fix theta and recalculate a_0. 
+% theta = 35*pi/180;
+% a_0 = tan(theta)*L_long;
+
 % Therefore, a_0*lambda = 2.2, so looking at 15.17.a, for b/lambda = 0.065,
 % it is obtained y_axis = 0.184
 phi_fl = 0.184*360/tan(theta);
@@ -48,12 +53,16 @@ phi_ph = 360 + phi_ex - phi_fl;
 l_p = phi_ph/360*lambda/0.548;
 
 %% Print all the values
-a = a/lambda
-b = b/lambda
-a_0 = a_0/lambda
+a = a/lambda*2
+b = b/lambda*2
+a_0 = a_0/lambda*2
 l_p = l_p/lambda
 lambda
 theta = theta*180/pi
+
+%% Fix theta
+theta = 35*pi/180;
+a_0 = tan(theta)*L_long;
 
 %%
 % How to calculate the lambda of the guide for a given r for te11 and tm11
@@ -73,3 +82,4 @@ b_a = 1.27;
 lambda = 122.4;
 kb = 4;
 a = 20*log10(abs(besselj(1, zero_1/b_a))^2 / sqrt(abs(1-(zero_1/kb)^2)))
+
