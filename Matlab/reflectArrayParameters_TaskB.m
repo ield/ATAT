@@ -4,8 +4,8 @@
 clear;
 c = 3e8;
 %% Frequencies
-fmax = 13e9;
-fmin = 11e9;
+fmax = 11e9;
+fmin = 9e9;
 Nfreq = 3;          % Number of frequencies evaluated
 f0 = (fmax + fmin)/2;
 DiffFreq = (fmax - f0)/floor(Nfreq/2);  % Distance between frequencies
@@ -23,8 +23,8 @@ lambda = c/f0;
 esub = 1.05;    % Dielectric constant of the separator
 lambdag = lambda/sqrt(esub);
 Lmax = 0.8*lambdag;      % To avoid grating lobes
-Px = 15e-3;
-Py = 15e-3;
+Px = 20e-3;
+Py = 20e-3;
 fprintf('The maximum length of the periodic structure is %f mm Px = %f mm, and Py = %f mm\n', Lmax*1e3, Px*1e3, Py*1e3);
 
 %% Number of elements
