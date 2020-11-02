@@ -1,11 +1,18 @@
-function [] = plotPlane(x1, y1, ylab)
-    figure('Color', [1 1 1]);
-    x1 = [-fliplr(x1) x1];
+function [] = plotPlane(x, y1, y2)
+%     figure('Color', [1 1 1]);
+    x = [-fliplr(x) x];
     y1 = [fliplr(y1) y1];
-    plot(x1, y1)
+    plot(x, y1, '-');
+    hold on;
+    
+    y2 = [fliplr(y2) y2];
+    plot(x, y2, '-');
+    
+    
     xlim([-90 90]);
     ylim([max(y1)-50 max(y1)]);
     xlabel('\phi');
-    ylabel(ylab);
+    ylabel('dB');
+    legend('E plane', 'H plane');
 end
 

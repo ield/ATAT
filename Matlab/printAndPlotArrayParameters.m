@@ -1,32 +1,38 @@
-function [] = printAndPlotArrayParameters(u, v, Etot, phi, theta, res, title)
+function [] = printAndPlotArrayParameters(Etot, phi, theta, res, title)
     %% Print title
-    fprintf('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n');
+    fprintf('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+    fprintf('\n');
     fprintf(title);
     fprintf('\n');
-
+    figure('Color',[1 1 1]);
+    set(gcf,'position',[100,100,1500,300])
     %% Plot the radiated field
-    [~, ~, Etotcar] = sph2cart(phi, pi/2-theta, abs(Etot));
-    plot3Duv(u, v, abs(Etotcar), 0, 'Radiation element (lineal)');
-    plot3Duv(u, v, 20*log10(abs(Etotcar)), 0, 'Array Factor (dB)');
-    plot3Duv(u, v, 20*log10(abs(Etotcar/max(max(Etotcar)))), -30, 'Array Factor Normalized (dB)');
+    %     [~, ~, Etotcar] = sph2cart(phi, pi/2-theta, abs(Etot));
+    u=sin(theta).*cos(phi);
+    v=sin(theta).*sin(phi);
+    Etotcar=Etot.*cos(theta);
+    subplot(1, 4, 1:3);
+    plot3Duv(u, v, 20*log10(abs(Etotcar/max(max(Etotcar)))), -40, 'Diagram Normalized (dB)');
 
     %% Parameters BW, D0, SLL
     % First it is calculated the normalized radiation diagram in planes E and H
+    subplot(1, 4, 4);
+    x = theta(1,:)*180/pi;
+    
     % In phi = pi/2 it is found the E plane, which is in res/4
-    xe = theta(round(res/4),:)*180/pi;
     ye=20*log10(abs(Etot(round(res/4),:).*cos(theta(round(res/4),:))));
     ye = ye-max(ye);
-    plotPlane(xe, ye, 'Normalized radiation diagram E plane (dB)');
-
+    
     % In phi = 0 it is found the E plane, which is in 1
-    xh = theta(1,:)*180/pi;
     yh=20*log10(abs(Etot(1,:).*cos(theta(1,:))));
     yh = yh-max(yh);
-    plotPlane(xh, yh, 'Normalized radiation diagram H plane (dB)');
+    
+    plotPlane(x, ye, yh);
+    hold off
 
     % Step 2. Find the bw
-    bwe = findBw(xe, ye, 'E');
-    bwh = findBw(xh, yh, 'H');
+    bwe = findBw(x, ye, 'E');
+    bwh = findBw(x, yh, 'H');
 
     % Step 3. Find the sll
     calcSLL(ye, 'E');
@@ -34,8 +40,12 @@ function [] = printAndPlotArrayParameters(u, v, Etot, phi, theta, res, title)
 
     % Step 4. Calculate directivity approximation for plannar arrays balanis
     % pag 51
-    d0 = 32400/(bwe*bwh);
-    D0 = 10*log10(abs(d0));
+%     d0 = 32400/(bwe*bwh);
+%     d0 = 4*pi*max(max(abs(Etot).^2))/(sum(sum(abs(Etot).^2.*sin(theta)))/numel(Etot));
+    d0 = 4*pi*max(max(abs(Etotcar).^2))/(sum(sum(abs(Etotcar).^2))/numel(Etotcar));
+   
+    D0 = 10*log10(d0);
+
     fprintf('The directivity is %f dB\n', D0);
 
 end

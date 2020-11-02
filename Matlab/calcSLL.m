@@ -5,7 +5,7 @@ function [sll] = calcSLL(y, plane)
     ydiff = diff(y(10:end));
     maxim = ydiff < limDer & ydiff > -limDer;
     index = find(maxim == 1, 2);
-    sll = y(index(2)+10 + 1);
+    sll = y(index(1)+10 + 1);
     fprintf('The SLL in %s are %f dB\n', plane, sll);
 end
 
