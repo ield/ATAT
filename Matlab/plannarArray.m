@@ -45,11 +45,8 @@ F = zeros(size(u));
 phix = 2*pi*dx/lambda*u;    % Phase in x array factor function diapo 19
 phiy = 2*pi*dy/lambda*v;    % Phase in y array factor function diapo 19
 
-for ii = 0:M-1        % For all the elements in the x direction
-    for jj = 0:N-1    % For all the elements in the y direction
-        F = F + exp(1i*(ii*phix + jj*phiy));
-    end
-end
+A = ones(M, N);
+F = calcArrayFactor(A, M, N, phix, phiy, u);
 
 plot3Duv(u, v, abs(F), 0, 'Array Factor (lineal)');
 plot3Duv(u, v, 20*log10(abs(F)), 0, 'Array Factor (dB)');
@@ -58,20 +55,16 @@ plot3Duv(u, v, 20*log10(abs(F/max(max(F)))), -30, 'Array Factor Normalized (dB)'
 %% Array Factor Spherical(Normalized)
 % It is necessary to do it in theta, phi, so that the sizes match the patch
 % later
-res = 300;         % Resolution
+res = 500;         % Resolution
 theta = linspace(0, pi, res);
 phi = linspace(0,2*pi, res);
 [theta, phi] = meshgrid(theta,phi); 
 
-F = zeros(size(theta));
 phix = 2*pi*dx/lambda*sin(theta).*cos(phi);    % Phase in x array factor function diapo 19
 phiy = 2*pi*dy/lambda*sin(theta).*sin(phi);    % Phase in y array factor function diapo 19
 
-for ii = 0:M-1        % For all the elements in the x direction
-    for jj = 0:N-1    % For all the elements in the y direction
-        F = F + exp(1i*(ii*phix + jj*phiy));
-    end
-end
+A = ones(M, N);
+F = calcArrayFactor(A, M, N, phix, phiy, theta);
 
 % u = abs(F).*sin(theta).*cos(phi);
 % v = abs(F).*sin(theta).*sin(phi);
@@ -94,25 +87,36 @@ plot3Duv(u, v, Ecar, 0, 'Radiation element (lineal)');
 % It is important to notice that the radiation diagram depends on the x and
 % y axis, but it does not matter how the projection is done.
 Etot = F.*abs(E);
-[~, ~, Etotcar] = sph2cart(phi, pi/2-theta, abs(Etot));
-plot3Duv(u, v, abs(Etotcar), 0, 'Radiation element (lineal)');
-plot3Duv(u, v, 20*log10(abs(Etotcar)), 0, 'Array Factor (dB)');
-plot3Duv(u, v, 20*log10(abs(Etotcar/max(max(Etotcar)))), -30, 'Array Factor Normalized (dB)');
 
 %% Parameters BW, D0, SLL
-% First it is calculated the normalized radiation diagram in planes E and H
-% In phi = pi/2 it is found the E plane, which is in res/4
-xe = theta(round(res/4),:)*180/pi;
-ye=20*log10(abs(Etot(round(res/4),:)).*cos(theta(round(res/4),:)));
-ye = ye-max(ye);
-plotPlane(xe, ye);
+printAndPlotArrayParameters(u, v, Etot, phi, theta, res, 'Uniform amplitude');
 
-% In phi = 0 it is found the E plane, which is in 1
-xh = theta(1,:)*180/pi;
-yh=20*log10(abs(Etot(1,:)).*cos(theta(1,:)));
-yh = yh-max(yh);
-plotPlane(xh, yh);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Radiation with failure of some elements (normalized)
+failure = .25;      % Percentage of failing elements
+A = rand(M);        % Feeding matrix
+A = A > failure;    % Matrix with the working elements (1 works, 0 does not).
 
-% Second, find the bw
-findBw(xe, ye);
-findBw(xh, yh);
+% Calculate the arry factor and radiation diagram
+F = calcArrayFactor(A, M, N, phix, phiy, theta);
+
+% Multiply the array factor and the single element field to obtain the
+% radiation pattern.
+Etot = F.*abs(E);
+printAndPlotArrayParameters(u, v, Etot, phi, theta, res, 'Elements failing');
+
+%% Radiation with different feedings
+A = triangDistribution(M, N);   % Triangular distribution
+
+% Calculate the arry factor and radiation diagram
+F = calcArrayFactor(A, M, N, phix, phiy, theta);
+
+% Multiply the array factor and the single element field to obtain the
+% radiation pattern.
+Etot = F.*abs(E);
+printAndPlotArrayParameters(u, v, Etot, phi, theta, res, 'Triangular distribution');
+
+
+
+
+
