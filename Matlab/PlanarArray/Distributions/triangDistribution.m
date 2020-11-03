@@ -1,18 +1,18 @@
-function [A] = binomialDistribution(M, N)
-% Script to simulate a binomial distribution
+function [A] = triangDistribution(M, N)
+% Script to simulate a triangular distribution
 
 % Feeding in x
 Ax = zeros(1, M);
 
 for ii = 0:M-1
-    Ax(ii+1) = nchoosek(M-1,ii);
+    Ax(ii+1) = 1-abs((-(M-1)/2+ii)./(M/2));
 end
 
 % Feeding in y
 Ay = zeros(1, N);
 
 for ii = 0:N-1
-    Ay(ii+1) = nchoosek(N-1,ii);
+    Ay(ii+1) = 1-abs((-(N-1)/2+ii)./(N/2));
 end
 
 % Combine feeding
@@ -22,5 +22,8 @@ for ii = 1:M-1
         A(ii, jj) = Ax(ii)*Ay(jj);
     end
 end
+
+A = A/max(max(A));
+
 end
 

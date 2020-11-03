@@ -1,20 +1,18 @@
-function [A] = cosDistribution(M, N)
-% Script to simulate a cos distribution
-H = 0.5;
+function [A] = binomialDistribution(M, N)
+% Script to simulate a binomial distribution
+
 % Feeding in x
 Ax = zeros(1, M);
 
 for ii = 0:M-1
-    elem = ii-(M-1)/2;
-    Ax(ii+1) = 1+H*(cos(pi*elem/(M-1)))^2;
+    Ax(ii+1) = nchoosek(M-1,ii);
 end
 
 % Feeding in y
 Ay = zeros(1, N);
 
 for ii = 0:N-1
-   elem = ii-(N-1)/2;
-    Ay(ii+1) = 1+H*(cos(pi*elem/(N-1)))^2;
+    Ay(ii+1) = nchoosek(N-1,ii);
 end
 
 % Combine feeding
@@ -24,5 +22,6 @@ for ii = 1:M-1
         A(ii, jj) = Ax(ii)*Ay(jj);
     end
 end
+A = A/max(max(A));
 end
 
