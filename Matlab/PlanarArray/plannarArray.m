@@ -5,6 +5,8 @@ c = 3e8;        % Speed of light(m/s)
 lambda = c/f;   % Wavelength (m)
 D = 30;         % Directivity (dBi)
 theta0 = 0;     % Pointting in broadside direction
+res = 100;         % Resolution
+path = '../../PlannarArray/Lab06/Images/';   % Path to save the files
 %% Step 1: Calculate size of the antenna (diapo 26)
 BW = 0.77*4*pi/10^(D/10);   % Beamwidth
 % Since the antenna is a sqaure BWx = BWy
@@ -39,18 +41,17 @@ fprintf('Therefore there are %i elements.\n', totalElem);
 save PlanarArray.mat BWx BWy Lx Ly dx dy M N; 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Array Factor Carthesians(Normalized)
-% This is done only to plot the array factor
-res = 300;         % Resolution
-u = linspace(-1, 1, res);
-v = linspace(-1, 1, res);
-[u, v] = meshgrid(u,v);    
-
-F = zeros(size(u));
-phix = 2*pi*dx/lambda*u;    % Phase in x array factor function diapo 19
-phiy = 2*pi*dy/lambda*v;    % Phase in y array factor function diapo 19
-
-A = ones(M, N);
-F = calcArrayFactor(A, M, N, phix, phiy, u);
+% % This is done only to plot the array factor
+% u = linspace(-1, 1, res);
+% v = linspace(-1, 1, res);
+% [u, v] = meshgrid(u,v);    
+% 
+% F = zeros(size(u));
+% phix = 2*pi*dx/lambda*u;    % Phase in x array factor function diapo 19
+% phiy = 2*pi*dy/lambda*v;    % Phase in y array factor function diapo 19
+% 
+% A = ones(M, N);
+% F = calcArrayFactor(A, M, N, phix, phiy, u);
 
 % plot3Duv(u, v, abs(F), 0, 'Array Factor (lineal)');
 % plot3Duv(u, v, 20*log10(abs(F)), 0, 'Array Factor (dB)');
@@ -72,7 +73,7 @@ F = calcArrayFactor(A, M, N, phix, phiy, theta);
 
 Fcar = abs(F).*cos(theta);
 
-Ecar = printAndPlotArrayParameters(Fcar, phi, theta, res, 'Array Factor');
+Ecar = printAndPlotArrayParameters(Fcar, phi, theta, res, 'Array Factor', path, 'arrayFactor');
 
 %% Effect of the element Spherical
 thetaUseful = theta<pi/2;
@@ -84,7 +85,10 @@ v = sin(theta).*sin(phi);
 Ecar = abs(E).*cos(theta);
 
 figure('Color',[1 1 1]);
-plot3Duv(u, v, Ecar, 0, 'Radiation element (lineal)');
+plotSingleElement(u, v, Ecar, 0, 'Radiation element (lineal)');
+
+saveas(gca, [path, 'elementField'],'epsc');
+hold off;
 
 % Combination element + array factor
 % It is important to notice that the radiation diagram depends on the x and
@@ -92,11 +96,12 @@ plot3Duv(u, v, Ecar, 0, 'Radiation element (lineal)');
 Etot = F.*E;
 
 % Parameters BW, D0, SLL
-Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Uniform amplitude');
+Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Uniform amplitude', path, 'unifDis');
 save unifromDistribution.mat A coorX coorY Ecar;
+maxNorm = max(max(20*log10(abs(Ecar))));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Radiation with failure of some elements (normalized)
-failure = .15;      % Percentage of failing elements
+failure = .25;      % Percentage of failing elements
 A = rand(M);        % Feeding matrix
 A = A > failure;    % Matrix with the working elements (1 works, 0 does not).
 % plotDistribution(A, M, N)
@@ -107,11 +112,11 @@ F = calcArrayFactor(A, M, N, phix, phiy, theta);
 % Multiply the array factor and the single element field to obtain the
 % radiation pattern.
 Etot = F.*abs(E);
-Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Elements failing');
+Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Elements failing', path, 'failDis', maxNorm);
 save unifromDistribution.mat A coorX coorY Ecar;
 %% Radiation with triangular distribution 
 A = triangDistribution(M, N);   % Triangular distribution
-plotDistribution(A, M, N);
+plotDistribution(A, M, N, path, 'triangDis');
 
 
 % Calculate the arry factor and radiation diagram
@@ -120,11 +125,11 @@ F = calcArrayFactor(A, M, N, phix, phiy, theta);
 % Multiply the array factor and the single element field to obtain the
 % radiation pattern.
 Etot = F.*abs(E);
-Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Triangular distribution');
-save unifromDistribution.mat A coorX coorY Ecar;
+Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Triangular distribution', path, 'triangPat', maxNorm);
+save triangularDistribution.mat A coorX coorY Ecar;
 %% Radiation with binomial distribution 
 A = binomialDistribution(M, N);   % Triangular distribution
-plotDistribution(A, M, N)
+plotDistribution(A, M, N, path, 'binomDis')
 
 % Calculate the arry factor and radiation diagram
 F = calcArrayFactor(A, M, N, phix, phiy, theta);
@@ -132,11 +137,11 @@ F = calcArrayFactor(A, M, N, phix, phiy, theta);
 % Multiply the array factor and the single element field to obtain the
 % radiation pattern.
 Etot = F.*E;
-Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Binomial distribution');
-save unifromDistribution.mat A coorX coorY Ecar;
+Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Binomial distribution', path, 'binomPat', maxNorm);
+save binomialDistribution.mat A coorX coorY Ecar;
 %% Radiation with cosine distribution 
 A = cosDistribution(M, N);   % Triangular distribution
-plotDistribution(A, M, N)
+plotDistribution(A, M, N, path, 'cosDis')
 
 % Calculate the arry factor and radiation diagram
 F = calcArrayFactor(A, M, N, phix, phiy, theta);
@@ -144,12 +149,13 @@ F = calcArrayFactor(A, M, N, phix, phiy, theta);
 % Multiply the array factor and the single element field to obtain the
 % radiation pattern.
 Etot = F.*abs(E);
-Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Cosine distribution');
+Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Cosine distribution', path, 'cosPat', maxNorm);
 save unifromDistribution.mat A coorX coorY Ecar;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Beam Steering x, y
-alphax = 0;    % Beam steering in º
-alphay = 0;    % Beam stering in º
+alphax = 45;    % Beam steering in º
+alphay = 45;    % Beam stering in º
+
 
 phix_st = phix + alphax*pi/180;
 phiy_st = phiy + alphay*pi/180;
@@ -162,11 +168,11 @@ F = calcArrayFactor(A, M, N, phix_st, phiy_st, theta);
 % Multiply the array factor and the single element field to obtain the
 % radiation pattern.
 Etot = F.*abs(E);
-Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Beam Steering x, y');
+Ecar = printAndPlotSteering(Etot, phi, theta, 'Beam Steering x, y', path, 'strxy', maxNorm);
 save unifromDistribution.mat A coorX coorY Ecar;
 %% Beam Steering theta, phi
-theta0 = 10;    % Beam steering in º
-phi0 = 10;    % Beam stering in º
+theta0 = 20;    % Beam steering in º
+phi0 = 20;    % Beam stering in º
 
 [alphax, alphay] = beamSteering(theta0, phi0, lambda, dx, dy);  % Input in º, output in rad
 
@@ -181,6 +187,6 @@ F = calcArrayFactor(A, M, N, phix_st, phiy_st, theta);
 % Multiply the array factor and the single element field to obtain the
 % radiation pattern.
 Etot = F.*E;
-Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Beam Steering, \theta, \varphi');
+Ecar = printAndPlotSteering(Etot, phi, theta, 'Beam Steering theta, phi', path, 'strthph', maxNorm);
 save unifromDistribution.mat A coorX coorY Ecar;
 

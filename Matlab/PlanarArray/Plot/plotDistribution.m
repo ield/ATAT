@@ -1,4 +1,4 @@
-function [] = plotDistribution(A, M, N)
+function [] = plotDistribution(A, M, N, path, fileName)
 figure('Color',[1 1 1]);
 x = 1:M;
 y = 1:N;
@@ -6,6 +6,9 @@ y = 1:N;
 size(x)
 size(y)
 pcolor(x, y, A);
+colormap summer
 colorbar;
+saveas(gca, [path, fileName],'epsc');
+hold off;
 end
 

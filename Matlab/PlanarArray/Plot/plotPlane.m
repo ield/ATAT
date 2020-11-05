@@ -10,7 +10,7 @@ function [] = plotPlane(x, y1, y2)
     
     
     xlim([-90 90]);
-    ylim([max(y1)-50 max(y1)]);
+    ylim([-50 0]);
     xlabel('\phi');
     ylabel('dB');
     legend('E plane', 'H plane');
