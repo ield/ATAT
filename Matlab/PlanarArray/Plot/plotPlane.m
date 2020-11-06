@@ -9,9 +9,9 @@ function [] = plotPlane(x, y1, y2, min)
     plot(x, y2, '-');
     
     
-    xlim([-90 90]);
+    xlim([-1 1]);
     ylim([min 0]);
-    xlabel('\phi');
+    xlabel('u, v');
     ylabel('dB');
     legend('E plane', 'H plane');
 end

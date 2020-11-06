@@ -1,4 +1,4 @@
-function [Etotcar] = printAndPlotArrayParameters(Etot, phi, theta, res, titleIn, path, fileName, maxNorm)
+function [] = printAndPlotArrayParameters(Etot, u, v, res, titleIn, path, fileName, maxNorm)
     %% Print title
     fprintf('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
     fprintf('\n');
@@ -11,36 +11,31 @@ function [Etotcar] = printAndPlotArrayParameters(Etot, phi, theta, res, titleIn,
     
     hold on;
     %% Plot the radiated field
-    %     [~, ~, Etotcar] = sph2cart(phi, pi/2-theta, abs(Etot));
-    u=sin(theta).*cos(phi);
-    v=sin(theta).*sin(phi);
-%     u = linspace(-1, 1, res);
-%     v = linspace(-1, 1, res);
-    Etotcar=Etot.*cos(theta);
     
     if(nargin < 8)  %In the case it is uniform distribution
-        maxNorm = max(max(20*log10(abs(Etotcar)))); %maximum used to normalize
+        maxNorm = max(max(20*log10(abs(Etot)))); %maximum used to normalize
     end
     
     subplot(1, 3, 1:2);
-    plot3Duv(u, v, 20*log10(abs(Etotcar))-maxNorm, min, 'Diagram Normalized (dB)');
+    plot3Duv(u, v, 20*log10(abs(Etot))-maxNorm, min, 'Diagram Normalized (dB)');
     
 
 
     %% Parameters BW, D0, SLL
     % First it is calculated the normalized radiation diagram in planes E and H
     subplot(1, 3, 3);
-    x = theta(1,:)*180/pi;
+    x = linspace(-1, 1, res);
     
     % In phi = pi/2 it is found the E plane, which is in res/4 In the case
     % there is beam sgteering this changes, so in this case the angle is
     % added
-    ye=20*log10(abs(Etot(round(res/4),:).*cos(theta(round(res/4),:))));
+    ye=20*log10(abs(Etot(round(res/2),:)));
     ye = ye-maxNorm;
     
     % In phi = 0 it is found the E plane, which is in 1
-    yh=20*log10(abs(Etot(1,:).*cos(theta(1,:))));
+    yh=20*log10(abs(Etot(:,round(res/2))));
     yh = yh-maxNorm;
+    yh = yh';
     
     plotPlane(x, ye, yh, min);
     hold off
@@ -58,8 +53,8 @@ function [Etotcar] = printAndPlotArrayParameters(Etot, phi, theta, res, titleIn,
     % Step 4. Calculate directivity approximation for plannar arrays balanis
     % pag 51
     d0 = 32400/(bwe*bwh);
-%     d0 = 4*pi*max(max(abs(Etot).^2))/(sum(sum(abs(Etot).^2.*sin(theta)))/numel(Etot));
-%     d0 = 4*pi*max(max(abs(Etotcar).^2))/(sum(sum(abs(Etotcar).^2))/numel(Etotcar));
+%     d0 = 4*pi*max(max(abs(u, v,).^2))/(sum(sum(abs(u, v,).^2.*sin(theta)))/numel(u, v,));
+%     d0 = 4*pi*max(max(abs(u, v,Etot).^2))/(sum(sum(abs(u, v,Etot).^2))/numel(u, v,Etot));
    
     D0 = 10*log10(d0);
 
