@@ -41,21 +41,21 @@ fprintf('Therefore there are %i elements.\n', totalElem);
 save PlanarArray.mat BWx BWy Lx Ly dx dy M N; 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Array Factor Carthesians(Normalized)
-% % This is done only to plot the array factor
-% u = linspace(-1, 1, res);
-% v = linspace(-1, 1, res);
-% [u, v] = meshgrid(u,v);    
-% 
-% F = zeros(size(u));
-% phix = 2*pi*dx/lambda*u;    % Phase in x array factor function diapo 19
-% phiy = 2*pi*dy/lambda*v;    % Phase in y array factor function diapo 19
-% 
-% A = ones(M, N);
-% F = calcArrayFactor(A, M, N, phix, phiy, u);
+% This is done only to plot the array factor
+u = linspace(-1, 1, res);
+v = linspace(-1, 1, res);
+[u, v] = meshgrid(u,v);    
 
-% plot3Duv(u, v, abs(F), 0, 'Array Factor (lineal)');
-% plot3Duv(u, v, 20*log10(abs(F)), 0, 'Array Factor (dB)');
-% plot3Duv(u, v, 20*log10(abs(F/max(max(F)))), -30, 'Array Factor Normalized (dB)');
+F = zeros(size(u));
+phix = 2*pi*dx/lambda*u;    % Phase in x array factor function diapo 19
+phiy = 2*pi*dy/lambda*v;    % Phase in y array factor function diapo 19
+
+A = ones(M, N);
+F = calcArrayFactor(A, M, N, phix, phiy, u);
+
+plot3Duv(u, v, abs(F), 0, 'Array Factor (lineal)');
+plot3Duv(u, v, 20*log10(abs(F)), 0, 'Array Factor (dB)');
+plot3Duv(u, v, 20*log10(abs(F/max(max(F)))), -30, 'Array Factor Normalized (dB)');
 
 %% Array Factor Spherical(Normalized)
 % It is necessary to do it in theta, phi, so that the sizes match the patch
@@ -150,7 +150,7 @@ F = calcArrayFactor(A, M, N, phix, phiy, theta);
 % radiation pattern.
 Etot = F.*abs(E);
 Ecar = printAndPlotArrayParameters(Etot, phi, theta, res, 'Cosine distribution', path, 'cosPat', maxNorm);
-save unifromDistribution.mat A coorX coorY Ecar;
+save cosineDistribution.mat A coorX coorY Ecar;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Beam Steering x, y
 alphax = 45;    % Beam steering in º
@@ -169,7 +169,7 @@ F = calcArrayFactor(A, M, N, phix_st, phiy_st, theta);
 % radiation pattern.
 Etot = F.*abs(E);
 Ecar = printAndPlotSteering(Etot, phi, theta, 'Beam Steering x, y', path, 'strxy', maxNorm);
-save unifromDistribution.mat A coorX coorY Ecar;
+save strxy.mat A coorX coorY Ecar;
 %% Beam Steering theta, phi
 theta0 = 20;    % Beam steering in º
 phi0 = 20;    % Beam stering in º
@@ -188,5 +188,5 @@ F = calcArrayFactor(A, M, N, phix_st, phiy_st, theta);
 % radiation pattern.
 Etot = F.*E;
 Ecar = printAndPlotSteering(Etot, phi, theta, 'Beam Steering theta, phi', path, 'strthph', maxNorm);
-save unifromDistribution.mat A coorX coorY Ecar;
+save strthph.mat A coorX coorY Ecar;
 

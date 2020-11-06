@@ -7,6 +7,8 @@ function [Etotcar] = printAndPlotArrayParameters(Etot, phi, theta, res, titleIn,
     figure('Color',[1 1 1]);
     set(gcf,'position',[100,100,1500,300]);
     
+    min = -60;
+    
     hold on;
     %% Plot the radiated field
     %     [~, ~, Etotcar] = sph2cart(phi, pi/2-theta, abs(Etot));
@@ -20,14 +22,14 @@ function [Etotcar] = printAndPlotArrayParameters(Etot, phi, theta, res, titleIn,
         maxNorm = max(max(20*log10(abs(Etotcar)))); %maximum used to normalize
     end
     
-    subplot(1, 4, 1:3);
-    plot3Duv(u, v, 20*log10(abs(Etotcar))-maxNorm, -50, 'Diagram Normalized (dB)');
+    subplot(1, 3, 1:2);
+    plot3Duv(u, v, 20*log10(abs(Etotcar))-maxNorm, min, 'Diagram Normalized (dB)');
     
 
 
     %% Parameters BW, D0, SLL
     % First it is calculated the normalized radiation diagram in planes E and H
-    subplot(1, 4, 4);
+    subplot(1, 3, 3);
     x = theta(1,:)*180/pi;
     
     % In phi = pi/2 it is found the E plane, which is in res/4 In the case
@@ -40,7 +42,7 @@ function [Etotcar] = printAndPlotArrayParameters(Etot, phi, theta, res, titleIn,
     yh=20*log10(abs(Etot(1,:).*cos(theta(1,:))));
     yh = yh-maxNorm;
     
-    plotPlane(x, ye, yh);
+    plotPlane(x, ye, yh, min);
     hold off
     
     title(titleIn);

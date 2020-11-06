@@ -1,4 +1,4 @@
-function [] = plotPlane(x, y1, y2)
+function [] = plotPlane(x, y1, y2, min)
 %     figure('Color', [1 1 1]);
     x = [-fliplr(x) x];
     y1 = [fliplr(y1) y1];
@@ -10,7 +10,7 @@ function [] = plotPlane(x, y1, y2)
     
     
     xlim([-90 90]);
-    ylim([-50 0]);
+    ylim([min 0]);
     xlabel('\phi');
     ylabel('dB');
     legend('E plane', 'H plane');

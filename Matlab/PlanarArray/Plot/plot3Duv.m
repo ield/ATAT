@@ -2,9 +2,9 @@ function [] = plot3Duv(u, v, Z, minZ, zLabelText)
 % Function to plot in 3D the values received as parameters in u, v
 surf(u, v, Z);
 view(2)
-colormap summer
+colormap winter
 shading interp
-caxis([-50 0]);
+caxis([minZ 0]);
 colorbar;
 xlabel('u');
 ylabel('v');    

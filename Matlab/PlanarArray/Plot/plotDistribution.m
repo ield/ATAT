@@ -6,7 +6,7 @@ y = 1:N;
 size(x)
 size(y)
 pcolor(x, y, A);
-colormap summer
+colormap winter
 colorbar;
 saveas(gca, [path, fileName],'epsc');
 hold off;
