@@ -1,4 +1,4 @@
-function [] = printAndPlotArrayParameters(Etot, u, v, res, titleIn, path, fileName, maxNorm)
+function [] = printAndPlotArrayParameters(Etot, u, v, res, titleIn, path, fileName, maxNorm, alphax, alphay)
     %% Print title
     fprintf('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
     fprintf('\n');
@@ -12,6 +12,10 @@ function [] = printAndPlotArrayParameters(Etot, u, v, res, titleIn, path, fileNa
     hold on;
     %% Plot the radiated field
     
+    if(nargin < 9)  %In the case there is no beam steering
+        alphax = 0;
+        alphay = 0;
+    end
     if(nargin < 8)  %In the case it is uniform distribution
         maxNorm = max(max(20*log10(abs(Etot)))); %maximum used to normalize
     end
@@ -29,26 +33,28 @@ function [] = printAndPlotArrayParameters(Etot, u, v, res, titleIn, path, fileNa
     % In phi = pi/2 it is found the E plane, which is in res/4 In the case
     % there is beam sgteering this changes, so in this case the angle is
     % added
-    ye=20*log10(abs(Etot(round(res/2),:)));
-    ye = ye-maxNorm;
+    fracu = alphax/180;
+    yu=20*log10(abs(Etot(round(res/2+fracu),:)));
+    yu = yu-maxNorm;
     
     % In phi = 0 it is found the E plane, which is in 1
-    yh=20*log10(abs(Etot(:,round(res/2))));
-    yh = yh-maxNorm;
-    yh = yh';
+    fracv = alphay/180;
+    yv=20*log10(abs(Etot(:,round(res/2+fracv))));
+    yv = yv-maxNorm;
+    yv = yv';
     
-    plotPlane(x, ye, yh, min);
+    plotPlane(x, yu, yv, min);
     hold off
     
     title(titleIn);
 
     % Step 2. Find the bw
-    bwe = findBw(x, ye, 'E');
-    bwh = findBw(x, yh, 'H');
+    bwe = findBw(x, yu, 'E');
+    bwh = findBw(x, yv, 'H');
 
     % Step 3. Find the sll
-    calcSLL(ye, 'E');
-    calcSLL(yh, 'H');
+    calcSLL(yu, 'E');
+    calcSLL(yv, 'H');
 
     % Step 4. Calculate directivity approximation for plannar arrays balanis
     % pag 51
