@@ -14,6 +14,6 @@ function [] = plotPlane(x, y1, y2, min, alphax, alphay)
     xla = ['u = ' num2str(alphax) 'º, v = ' num2str(alphay) 'º'];
     xlabel(xla);
     ylabel('dB');
-    legend('v', 'u');
+    legend('v (H plane)', 'u (E plane)');
 end
 

@@ -55,12 +55,12 @@ function [] = printAndPlotArrayParameters(Etot, u, v, res, titleIn, path, fileNa
     u0 = round(res*(1/2-fracv));
     u0 = x(u0);     % Value of u at the plane
     
-    bwe = findBw(x, yu+maxNorm, 'u', v0, res);
-    bwh = findBw(x, yv+maxNorm, 'v', v0, res);
+    bwe = findBw(x, yu+maxNorm, 'H plane', v0, res);
+    bwh = findBw(x, yv+maxNorm, 'E plane', v0, res);
 
     % Step 3. Find the sll
-    calcSLL(yu, 'E');
-    calcSLL(yv, 'H');
+    calcSLL(yu, 'H plane');
+    calcSLL(yv, 'E plane');
 
     % Step 4. Calculate directivity approximation for plannar arrays balanis
     % pag 51
