@@ -55,8 +55,8 @@ function [] = printAndPlotArrayParameters(Etot, u, v, res, titleIn, path, fileNa
     u0 = round(res*(1/2-fracv));
     u0 = x(u0);     % Value of u at the plane
     
-    bwe = findBw(x, yu+maxNorm, 'u', v0, res);
-    bwh = findBw(x, yv+maxNorm, 'v', v0, res);
+    bwe = findBw(x, yu, 'u', v0, res);
+    bwh = findBw(x, yv, 'v', v0, res);
 
     % Step 3. Find the sll
     calcSLL(yu, 'E');
@@ -69,9 +69,9 @@ function [] = printAndPlotArrayParameters(Etot, u, v, res, titleIn, path, fileNa
 %     d0 = 4*pi*max(max(abs(Etot))).^2/(sum(sum(abs(Etot).^2))/numel(Etot));
    
     D0 = 10*log10(d0);
-% 
+
     fprintf('The directivity is %f dB\n', D0);
-%     
+    
     %% Save the file
     saveas(gca, [path, fileName],'epsc');
     hold off;

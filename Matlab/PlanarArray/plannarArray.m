@@ -131,7 +131,7 @@ save cosineDistribution.mat A coorX coorY Etot;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Beam Steering x, y
 alphax = 45;    % Beam steering in º
-alphay = -45;    % Beam stering in º
+alphay = 20;    % Beam stering in º
 
 A = ones(M, N); % Uniform distribution
 A = phasedDistribution(A, M, N, alphax*pi/180, alphay*pi/180);
@@ -143,7 +143,6 @@ F = calcArrayFactor(A, M, N, phix, phiy, u);
 % radiation pattern.
 Etot = F.*E;
 printAndPlotArrayParameters(Etot, u, v, res, 'Beam Steering x, y', path, 'strxy', maxNorm, alphax, alphay);
-printAndPlotSteering(Etot, u, v,'Beam Steering x, y', path, 'strxy', maxNorm);
 save strxy.mat A coorX coorY Etot;
 %% Beam Steering theta, phi
 theta0 = 20;    % Beam steering in º
@@ -154,12 +153,15 @@ phi0 = 20;    % Beam stering in º
 A = ones(M, N); % Uniform distribution
 A = phasedDistribution(A, M, N, alphax, alphay);
 
+alphax = alphax*180/pi;
+alphay = alphay*180/pi;
+
 % Calculate the arry factor and radiation diagram
 F = calcArrayFactor(A, M, N, phix, phiy, u);
 
 % Multiply the array factor and the single element field to obtain the
 % radiation pattern.
 Etot = F.*E;
-printAndPlotSteering(Etot, u, v,'Beam Steering x, y', path, 'strxy', maxNorm);
+printAndPlotArrayParameters(Etot, u, v, res, 'Beam Steering theta, phi', path, 'strthph', maxNorm, alphax, alphay);
 save strthph.mat A coorX coorY Etot;
 

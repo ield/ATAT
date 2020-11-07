@@ -1,4 +1,4 @@
-function [] = plotPlane(x, y1, y2, min)
+function [] = plotPlane(x, y1, y2, min, alphax, alphay)
 %     figure('Color', [1 1 1]);
 %     x = [-fliplr(x) x];
 %     y1 = [fliplr(y1) y1];
@@ -11,8 +11,9 @@ function [] = plotPlane(x, y1, y2, min)
     
     xlim([-1 1]);
     ylim([min 0]);
-    xlabel('u, v');
+    xla = ['u = ' num2str(alphax) 'º, v = ' num2str(alphay) 'º'];
+    xlabel(xla);
     ylabel('dB');
-    legend('E plane', 'H plane');
+    legend('v', 'u');
 end
 
