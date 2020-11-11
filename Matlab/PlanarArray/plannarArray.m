@@ -38,7 +38,7 @@ fprintf('\nThere are %i elements in the x direction separated %f mm.\n', M, dx*1
 fprintf('There are %i elements in the y direction separated %f mm.\n', N, dy*1e3);
 fprintf('Therefore there are %i elements.\n', totalElem);
 
-save PlanarArray.mat BWx BWy Lx Ly dx dy M N; 
+save PlanarArray.mat BWx BWy Lx Ly dx dy M N lambda; 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Array Factor Carthesians(Normalized)
 % This is done only to plot the array factor
