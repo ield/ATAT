@@ -6,7 +6,7 @@ lambda = c/f;   % Wavelength (m)
 D = 30;         % Directivity (dBi)
 theta0 = 0;     % Pointting in broadside direction
 res = 360;         % Resolution
-path = '../../PlannarArray/Lab06/Images/';   % Path to save the files
+path = '../../PlanarArray/Lab06/Images/';   % Path to save the files
 %% Step 1: Calculate size of the antenna (diapo 26)
 BW = 0.77*4*pi/10^(D/10);   % Beamwidth
 % Since the antenna is a sqaure BWx = BWy
@@ -90,7 +90,7 @@ F = calcArrayFactor(A, M, N, phix, phiy, theta);
 % radiation pattern.
 Etot = F.*E;
 printAndPlotArrayParameters(Etot, u, v,res, 'Elements failing', path, 'failDis', maxNorm);
-save unifromDistribution.mat A coorX coorY Etot;
+save failingDistribution.mat A coorX coorY Etot;
 %% Radiation with triangular distribution 
 A = triangDistribution(M, N);   % Triangular distribution
 plotDistribution(A, M, N, path, 'triangDis');

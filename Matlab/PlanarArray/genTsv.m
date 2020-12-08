@@ -1,5 +1,5 @@
 load 'PlanarArray.mat';             % Here it is all the information of the planar array (positions, etc)
-load 'cosineDistribution.mat';      % Here it is all the information of the distribution
+load 'failingDistribution.mat';      % Here it is all the information of the distribution
 
 M = length(A(1, :));
 N = length(A(:, 1));
