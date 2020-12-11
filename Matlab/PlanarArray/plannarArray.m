@@ -74,7 +74,7 @@ Etot = F.*E;
 
 % Parameters BW, D0, SLL
 printAndPlotArrayParameters(Etot, u, v,res, 'Uniform amplitude', path, 'unifDis');
-save unifromDistribution.mat A coorX coorY Etot;
+save uniformDistribution.mat A coorX coorY Etot;
 maxNorm = max(max(20*log10(abs(Etot))));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Radiation with failure of some elements (normalized)
