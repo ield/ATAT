@@ -6,6 +6,8 @@ function [] = plotReconstruction(x, y, E_x, E_y, A, path, distribution)
     E_x_treated = abs(E_x)/maxim_normalize;
     E_y_treated = abs(E_y)/maxim_normalize;
     maxZ = 1;
+    axismin = -5;    % mm
+    axismax = 13;   % mm
     
     figure('Color',[1 1 1]);
     set(gcf,'position',[100,100,900,600]);
@@ -18,13 +20,13 @@ function [] = plotReconstruction(x, y, E_x, E_y, A, path, distribution)
     
     subplot(2, 2, 3);
     plot3Dxy(x, y, 20*log10(E_x_treated), -100, 0, 'Normalized radiated field E_x (dB) (zoom)');
-    xlim([-0.01 0.05]);
-    ylim([-0.01 0.05]);
+    xlim([axismin axismax]);
+    ylim([axismin axismax]);
     
     subplot(2, 2, 4);
     plot3Dxy(x, y, E_y_treated, minZ, maxZ, 'Normalized radiated field E_y (zoom)');
-    xlim([-0.01 0.05]);
-    ylim([-0.01 0.05]);
+    xlim([axismin axismax]);
+    ylim([axismin axismax]);
     
     saveas(gca, [path, distribution, '_reconstructed'],'epsc');
     
@@ -45,13 +47,13 @@ function [] = plotReconstruction(x, y, E_x, E_y, A, path, distribution)
     
     subplot(2, 2, 3);
     plot3Dxy(x, y, phase_x, minZ, maxZ, 'Phase E_x (zoom)');
-    xlim([-0.01 0.05]);
-    ylim([-0.01 0.05]);
+    xlim([axismin axismax]);
+    ylim([axismin axismax]);
     
     subplot(2, 2, 4);
     plot3Dxy(x, y, phase_y, minZ, maxZ, 'Phase E_y (zoom)');
-    xlim([-0.01 0.05]);
-    ylim([-0.01 0.05]);
+    xlim([axismin axismax]);
+    ylim([axismin axismax]);
     
     saveas(gca, [path, distribution, '_phase'],'epsc');
     

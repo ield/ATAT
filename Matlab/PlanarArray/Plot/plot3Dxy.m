@@ -7,8 +7,8 @@ colormap winter
 shading interp
 caxis([minZ maxZ]);
 colorbar;
-xlabel('x');
-ylabel('y');    
+xlabel('x (mm)');
+ylabel('y (mm)');    
 title(titleText);
 zlim([minZ max(max(Z))]);
 end
